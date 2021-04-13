@@ -9,6 +9,19 @@ volumes:
     name: foo-emqx-log
 
 services:
+  mongo:
+    container_name: mongo
+    image: mongo:4.4
+    restart: always
+    environment: 
+      TZ: "America/Lima"
+      MONGO_INITDB_ROOT_USERNAME: "devuser"
+      MONGO_INITDB_ROOT_PASSWORD: "devpassword"
+    volumes: 
+      - ./mongodata:/data/db
+    ports: 
+      - 27017:27017
+
   emqx:
     container_name: emqx
     image: emqx/emqx:v4.0.11
