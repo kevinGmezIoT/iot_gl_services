@@ -1,13 +1,12 @@
 version: "3.8"
-#
+
 volumes:
   vol-emqx-data:
     name: foo-emqx-data
-#  vol-emqx-etc:
-#    name: foo-emqx-etc
+
   vol-emqx-log:
     name: foo-emqx-log
-#
+
 
 
 services:
@@ -53,7 +52,6 @@ services:
       - 8085:8081
     volumes:
       - vol-emqx-data:/opt/emqx/data
-    #  - vol-emqx-etc:/opt/emqx/etc
       - vol-emqx-log:/opt/emqx/log
     
     links: 
