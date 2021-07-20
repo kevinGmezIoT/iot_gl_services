@@ -8,35 +8,34 @@ volumes:
     name: foo-emqx-log
 
 
-
 services:
-    node:
-      container_name: node
-      image: "node:14"
-      restart: always
-      working_dir: /home/node/app
-      volumes:
-        - ./mycode/index.js:/home/node/app/index.js
-      ports:
-        - "3000:3000"
-        - "3001:3001"
-        - "80:3002"
-      links:
-        - emqx
-        - mongo
-      command: sh -c "node index.js"
+  node:
+    container_name: node
+    image: "node:14"
+    restart: always
+    working_dir: /home/node/app
+    volumes:
+      - ./mycode/index.js:/home/node/app/index.js
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "80:3002"
+    links:
+      - emqx
+      - mongo
+    command: sh -c "node index.js"
   mongo:
     container_name: mongo
     image: mongo:4.4
     restart: always
     environment: 
       TZ: "${TZ}"
-      MONGO_INITDB_ROOT_USERNAME: "{MONGO_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "{MONGO_PASSWORD}"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD}"
     volumes: 
       - ./mongodata:/data/db
     ports: 
-      - {MONGO_EXT_PORT}:27017
+      - ${MONGO_EXT_PORT}:27017
 
   emqx:
     container_name: emqx
@@ -64,9 +63,9 @@ services:
       EMQX_NAME: kevinIoT
       EMQX_HOST: 127.0.0.1
       TZ: "America/Lima"
-      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "{EMQX_DEFAULT_USER_PASSWORD}"
+      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "${EMQX_DEFAULT_USER_PASSWORD}"
 
-      EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: "{EMQX_DEFAULT_APLICATION_SECRET}"
+      EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: "${EMQX_DEFAULT_APLICATION_SECRET}"
 
       EMQX_ALLOW_ANONYMOUS: "false"
       EMQX_NOMATCH: "deny"
@@ -74,11 +73,11 @@ services:
       EMQX_AUTH__MONGO__TOPOLOGY__POOL_SIZE: 1
       EMQX_AUTH__MONGO__TOPOLOGY__MAX_OVERFLOW: 0
 
-      EMQX_AUTH__MONGO__SERVER: "mongo:{MONGO_EXT_PORT}"
+      EMQX_AUTH__MONGO__SERVER: "mongo:${MONGO_EXT_PORT}"
       EMQX_AUTH__MONGO__POOL: 10
 
-      EMQX_AUTH__MONGO__LOGIN: "{MONGO_USERNAME}"
-      EMQX_AUTH__MONGO__PASSWORD: "{MONGO_PASSWORD}"
+      EMQX_AUTH__MONGO__LOGIN: "${MONGO_USERNAME}"
+      EMQX_AUTH__MONGO__PASSWORD: "${MONGO_PASSWORD}"
       EMQX_AUTH__MONGO__AUTH_SOURCE: admin
 
       EMQX_AUTH__MONGO__DATABASE: "iot-gl"
